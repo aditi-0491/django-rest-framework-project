@@ -1,0 +1,26 @@
+#- https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md -
+FROM node:17.8.0
+
+ADD Zscalar_Root.cer /etc/ssl/certs
+
+RUN apt-get update && apt-get install -y vim
+
+#---------------
+#- npm section -
+#---------------
+#RUN npm config set registry
+ENV NPM_CONFIG_LOGLEVEL warn
+#ENV NPM_CONFIG_CAFILE=/etc/ssl/certs/ZscalerRootCertificate-2048-SHA256.crt
+ENV NPM_CONFIG_CAFILE=/etc/ssl/certs/Zscalar_Root.cer
+ENV NPM_CONFIG_STRICT_SSL=false
+
+#RUN npm install -g @angular/cli@8.3.20
+
+RUN npm install -g @angular/cli
+
+#ADD app/package-lock.json /app/package-lock.json
+ADD ./app /app
+
+WORKDIR /app
+
+RUN npm install
